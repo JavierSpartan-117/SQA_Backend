@@ -14,6 +14,8 @@ export class MqttService implements OnModuleInit {
     rejectUnauthorized: true, // Para desarrollo, en producción debería ser true
   };
 
+  private readonly topicLedControl = 'control/led';
+
   onModuleInit() {
     this.connectToMqttBroker();
   }
@@ -41,21 +43,31 @@ export class MqttService implements OnModuleInit {
       this.logger.log('Reintentando conexión al broker MQTT...');
     });
 
-    this.client.on('message', (topic, message) => {
-      this.logger.log(`Mensaje recibido en ${topic}: ${message.toString()}`);
-      const data = JSON.parse(message.toString());
-      this.processSensorData(data);
-    });
+    // this.client.on('message', (topic, message) => {
+    //   this.logger.log(`Mensaje recibido en ${topic}: ${message.toString()}`);
+    //   const data = JSON.parse(message.toString());
+    //   this.processSensorData(data);
+    // });
   }
 
-  private processSensorData(data: any) {
-    const { humedad, temperatura, humedadSuelo } = data;
-    this.logger.log(
-      `Humedad: ${humedad}, Temperatura: ${temperatura}, Humedad del Suelo: ${humedadSuelo}`,
-    );
+  // private processSensorData(data: any) {
+  //   const { humedad, temperatura, humedadSuelo } = data;
+  //   this.logger.log(
+  //     `Humedad: ${humedad}, Temperatura: ${temperatura}, Humedad del Suelo: ${humedadSuelo}`,
+  //   );
 
-    // Aquí puedes integrar con tus servicios para guardar en la base de datos
-    // Por ejemplo:
-    // this.sensorDataService.saveData({ humedad, temperatura, humedadSuelo });
+  //   // Aquí puedes integrar con tus servicios para guardar en la base de datos
+  //   // Por ejemplo:
+  //   // this.sensorDataService.saveData({ humedad, temperatura, humedadSuelo });
+  // }
+
+  public publishLedControl(state: string) {
+    this.client.publish(this.topicLedControl, state, (err) => {
+      if (err) {
+        this.logger.error('Error al publicar mensaje: ', err);
+      } else {
+        this.logger.log(`Publicando mensaje: ${state}`);
+      }
+    });
   }
 }
