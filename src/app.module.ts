@@ -7,9 +7,10 @@ import { MqttModule } from './mqtt/mqtt.module';
 import { MqttPublisherService } from './mqtt/mqtt-publisher.service';
 import { MqttSubscriberService } from './mqtt/mqtt-subscriber.service';
 import { SensorsWsModule } from './sensors-ws/sensors-ws.module';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
-  imports: [SensorsModule, MqttModule, SensorsWsModule],
+  imports: [ConfigModule.forRoot(), SensorsModule, MqttModule, SensorsWsModule],
   controllers: [AppController],
   providers: [
     AppService,

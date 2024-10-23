@@ -6,10 +6,10 @@ export class MqttConnectionService {
   private client: mqtt.MqttClient;
   private readonly logger = new Logger(MqttConnectionService.name);
 
-  private readonly mqttUrl = 'mqtts://h1a827e4.ala.us-east-1.emqxsl.com:8883';
+  private readonly mqttUrl = process.env.MQTT_URL;
   private readonly mqttOptions = {
-    username: 'javier.tema57791@gmail.com',
-    password: 'Hola1234',
+    username: process.env.MQTT_USERNAME,
+    password: process.env.MQTT_PASSWORD,
     rejectUnauthorized: true,
   };
 
