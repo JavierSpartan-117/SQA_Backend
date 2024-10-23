@@ -1,16 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { LedControlDto } from './dto/led-control.dts';
-import { MqttService } from 'src/mqtt/mqtt.service';
-// import { CreateSensorDto } from './dto/create-sensor.dto';
-// import { UpdateSensorDto } from './dto/update-sensor.dto';
+import { MqttPublisherService } from 'src/mqtt/mqtt-publisher.service';
 
 @Injectable()
 export class SensorsService {
-  constructor(private readonly mqttService: MqttService) {}
+  constructor(private readonly mqttPublisherService: MqttPublisherService) {}
 
   create(ledControlDto: LedControlDto): string {
     if (ledControlDto.state === 'on') {
-      this.mqttService.publishLedControl(ledControlDto.state);
+      this.mqttPublisherService.publishLedControl(ledControlDto.state);
       return 'Encendiendo el LED';
     } else {
       return 'Apagando el LED';
