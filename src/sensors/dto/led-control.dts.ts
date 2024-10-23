@@ -1,7 +1,8 @@
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty } from 'class-validator';
+import { LedControl } from '../enums/led-control.enum';
 
 export class LedControlDto {
-  @IsString()
+  @IsEnum(LedControl)
   @IsNotEmpty()
-  state: string;
+  state: LedControl;
 }

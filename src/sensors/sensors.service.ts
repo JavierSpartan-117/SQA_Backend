@@ -7,7 +7,7 @@ export class SensorsService {
   constructor(private readonly mqttPublisherService: MqttPublisherService) {}
 
   create(ledControlDto: LedControlDto): string {
-    if (ledControlDto.state === 'on') {
+    if (ledControlDto.state === 'on' || ledControlDto.state === 'off') {
       this.mqttPublisherService.publishLedControl(ledControlDto.state);
       return 'Encendiendo el LED';
     } else {
