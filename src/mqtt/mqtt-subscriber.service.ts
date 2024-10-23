@@ -1,15 +1,20 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { MqttConnectionService } from './mqtt-connection.service';
 import mqtt from 'mqtt/*';
+import { SensorsWsService } from 'src/sensors-ws/sensors-ws.service';
+import { SensorsWsGateway } from 'src/sensors-ws/sensors-ws.gateway';
 
 @Injectable()
 export class MqttSubscriberService implements OnModuleInit {
   private client: mqtt.MqttClient;
   private readonly logger = new Logger(MqttSubscriberService.name);
-
   private readonly topicSensorData = 'sensor/datos';
 
-  constructor(private readonly mqttConnectionService: MqttConnectionService) {}
+  constructor(
+    private readonly mqttConnectionService: MqttConnectionService,
+    private readonly sensorsWsGateway: SensorsWsGateway,
+    private readonly sensorsWsService: SensorsWsService,
+  ) {}
 
   onModuleInit() {
     this.client = this.mqttConnectionService.connect();
@@ -27,15 +32,15 @@ export class MqttSubscriberService implements OnModuleInit {
 
     this.client.on('message', (topic, message) => {
       const messageString = message.toString();
-      this.logger.log(`Mensaje recibido en ${topic}: ${message.toString()}`);
+      // this.logger.log(`Mensaje recibido en ${topic}: ${message.toString()}`);
       try {
         // Manejar NaN en el mensaje
         const sanitizedMessage = messageString.replace(/nan/gi, 'null');
-
         // Parsear JSON
         const data = JSON.parse(sanitizedMessage);
 
-        this.processSensorData(data);
+        // this.processSensorData(data);
+        this.sensorsWsGateway.sendSensorData(data);
       } catch (error) {
         this.logger.error('Error al procesar el mensaje JSON: ', error.message);
       }

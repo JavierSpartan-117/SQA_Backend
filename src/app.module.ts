@@ -6,9 +6,10 @@ import { MqttConnectionService } from './mqtt/mqtt-connection.service';
 import { MqttModule } from './mqtt/mqtt.module';
 import { MqttPublisherService } from './mqtt/mqtt-publisher.service';
 import { MqttSubscriberService } from './mqtt/mqtt-subscriber.service';
+import { SensorsWsModule } from './sensors-ws/sensors-ws.module';
 
 @Module({
-  imports: [SensorsModule, MqttModule],
+  imports: [SensorsModule, MqttModule, SensorsWsModule],
   controllers: [AppController],
   providers: [
     AppService,
