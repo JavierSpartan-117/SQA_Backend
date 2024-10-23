@@ -10,7 +10,12 @@ import {
 import { Server, Socket } from 'socket.io';
 import { SensorsWsService } from './sensors-ws.service';
 
-@WebSocketGateway()
+@WebSocketGateway({
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+})
 export class SensorsWsGateway
   implements OnGatewayConnection, OnGatewayDisconnect
 {
@@ -32,7 +37,7 @@ export class SensorsWsGateway
   // Metodo para enviar datos al frontend
   sendSensorData(data: any) {
     this.server.emit('sensorData', data);
-    this.logger.log(`Enviando datos al frontend: ${JSON.stringify(data)}`);
+    // this.logger.log(`Enviando datos al frontend: ${JSON.stringify(data)}`);
   }
 
   // Metodo para recibir mensakes del frontend (Opcional)
