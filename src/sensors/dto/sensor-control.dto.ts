@@ -1,11 +1,11 @@
 import { IsEnum, IsNotEmpty } from 'class-validator';
 import { SensorControl } from '../enums/sensor-control.enum';
-import { Topic } from '../enums/topic.enum';
+import { TopicSensor } from '../enums/topic-sensor.enum';
 
 export class SensorControlDto {
-  @IsEnum(Topic)
+  @IsEnum(TopicSensor)
   @IsNotEmpty()
-  topic: Topic;
+  topic: TopicSensor;
 
   @IsEnum(SensorControl)
   @IsNotEmpty()

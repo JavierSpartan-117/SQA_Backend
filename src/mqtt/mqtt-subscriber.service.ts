@@ -11,6 +11,7 @@ export class MqttSubscriberService implements OnModuleInit {
   private readonly topic_humidity_soil = 'sensors/humidity-soil';
   private readonly topic_humidity_temperature = 'sensors/humidity-temperature';
   private readonly topic_water_level = 'sensors/water-level';
+  private readonly topic_water_mode = 'water-mode';
 
   constructor(
     private readonly mqttConnectionService: MqttConnectionService,
@@ -24,6 +25,7 @@ export class MqttSubscriberService implements OnModuleInit {
     humedad: null,
     temperatura: null,
     nivelAgua: null,
+    modoBomba: null,
   };
 
   private readonly sendInterval = 1000; // Intervalo en ms para enviar datos al frontend
@@ -34,6 +36,7 @@ export class MqttSubscriberService implements OnModuleInit {
     this.subscribeToTopic(this.topic_humidity_soil);
     this.subscribeToTopic(this.topic_humidity_temperature);
     this.subscribeToTopic(this.topic_water_level);
+    this.subscribeToTopic(this.topic_water_mode);
 
     // Configurar el envío de datos al frontend cada cierto tiempo
     this.intervalHandle = setInterval(() => {
@@ -75,17 +78,22 @@ export class MqttSubscriberService implements OnModuleInit {
       case this.topic_water_level:
         this.sensorData.nivelAgua = data.nivelAgua;
         break;
+      case this.topic_water_mode:
+        this.sensorData.modoBomba = data.modoBomba;
+        break;
     }
   }
 
   // Enviar los datos al frontend solo si todos están presentes
   private sendDataToFrontend() {
-    const { humedadSuelo, humedad, temperatura, nivelAgua } = this.sensorData;
+    const { humedadSuelo, humedad, temperatura, nivelAgua, modoBomba } =
+      this.sensorData;
     if (
       humedadSuelo !== null &&
       humedad !== null &&
       temperatura !== null &&
-      nivelAgua !== null
+      nivelAgua !== null &&
+      modoBomba !== null
     ) {
       this.sensorsWsGateway.sendSensorData(this.sensorData);
       // this.logger.log(
@@ -103,6 +111,7 @@ export class MqttSubscriberService implements OnModuleInit {
       humedad: null,
       temperatura: null,
       nivelAgua: null,
+      modoBomba: null,
     };
   }
 

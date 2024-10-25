@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { SensorControlDto } from './dto/sensor-control.dts';
+import { SensorControlDto } from './dto/sensor-control.dto';
 import { MqttPublisherService } from 'src/mqtt/mqtt-publisher.service';
 
 @Injectable()
@@ -13,14 +13,18 @@ export class SensorsService {
   private readonly topic_control_water_mode = 'control/water-mode';
 
   create(sensorControlDto: SensorControlDto): string {
-    if (sensorControlDto.state === 'on' || sensorControlDto.state === 'off') {
+    if (sensorControlDto.state === 'on') {
       this.mqttPublisherService.publishSensorControl(
         sensorControlDto.topic,
         sensorControlDto.state,
       );
-      return 'Encendiendo el LED';
-    } else {
-      return 'Apagando el LED';
+      return 'Encendiendo sensor';
+    } else if (sensorControlDto.state === 'off') {
+      this.mqttPublisherService.publishSensorControl(
+        sensorControlDto.topic,
+        sensorControlDto.state,
+      );
+      return 'Apagando sensor';
     }
   }
 

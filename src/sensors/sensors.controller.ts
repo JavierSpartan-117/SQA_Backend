@@ -10,7 +10,7 @@ import {
 import { SensorsService } from './sensors.service';
 // import { CreateSensorDto } from './dto/create-sensor.dto';
 import { UpdateSensorDto } from './dto/update-sensor.dto';
-import { SensorControlDto } from './dto/sensor-control.dts';
+import { SensorControlDto } from './dto/sensor-control.dto';
 
 @Controller('sensors')
 export class SensorsController {
