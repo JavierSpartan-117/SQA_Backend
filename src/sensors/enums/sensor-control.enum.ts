@@ -1,4 +1,4 @@
-export enum LedControl {
+export enum SensorControl {
   ON = 'on',
   OFF = 'off',
 }

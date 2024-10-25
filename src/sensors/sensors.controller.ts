@@ -10,15 +10,15 @@ import {
 import { SensorsService } from './sensors.service';
 // import { CreateSensorDto } from './dto/create-sensor.dto';
 import { UpdateSensorDto } from './dto/update-sensor.dto';
-import { LedControlDto } from './dto/led-control.dts';
+import { SensorControlDto } from './dto/sensor-control.dts';
 
 @Controller('sensors')
 export class SensorsController {
   constructor(private readonly sensorsService: SensorsService) {}
 
-  @Post('led/control')
-  create(@Body() ledControlDtio: LedControlDto) {
-    return this.sensorsService.create(ledControlDtio);
+  @Post('control')
+  create(@Body() sensorControlDto: SensorControlDto) {
+    return this.sensorsService.create(sensorControlDto);
   }
 
   @Get()
