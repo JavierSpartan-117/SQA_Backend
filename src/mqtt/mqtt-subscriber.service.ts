@@ -20,7 +20,7 @@ export class MqttSubscriberService implements OnModuleInit {
   ) {}
 
   // Objeto para acumular los datos de los sensores
-  private sensorData = {
+  public sensorData = {
     humedadSuelo: null,
     humedad: null,
     temperatura: null,

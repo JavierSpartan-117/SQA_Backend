@@ -11,6 +11,6 @@ import { SensorsWsModule } from 'src/sensors-ws/sensors-ws.module';
     MqttSubscriberService,
     MqttPublisherService,
   ],
-  exports: [MqttPublisherService], // Si otros módulos necesitan publicar mensajes
+  exports: [MqttPublisherService, MqttSubscriberService], // Si otros módulos necesitan publicar mensajes
 })
 export class MqttModule {}
