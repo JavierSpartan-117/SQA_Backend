@@ -20,4 +20,14 @@ export class MqttPublisherService {
       }
     });
   }
+
+  public publishModeBomb(topic: string, mode: string) {
+    this.client.publish(topic, mode, (err) => {
+      if (err) {
+        this.logger.error('Error al publicar mensaje: ', err);
+      } else {
+        this.logger.log(`Publicando mensaje: ${mode}`);
+      }
+    });
+  }
 }

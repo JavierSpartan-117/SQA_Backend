@@ -1,4 +1,4 @@
 export enum WaterPumpMode {
-  AUTOMATICO = 'automatico',
+  AUTOMATICO = 'auto',
   MANUAL = 'manual',
 }

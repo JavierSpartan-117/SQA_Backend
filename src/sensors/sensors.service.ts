@@ -59,12 +59,12 @@ export class SensorsService {
     }
 
     // Publicar comando MQTT para cambiar el modo de la bomba de agua
-    this.mqttPublisherService.publishSensorControl(
+    this.mqttPublisherService.publishModeBomb(
       this.topic_control_water_mode,
       mode,
     );
 
-    return mode === 'automatico'
+    return mode === 'auto'
       ? 'Modo automático activado'
       : mode === 'manual'
         ? 'Modo manual activado'
