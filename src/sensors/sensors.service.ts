@@ -19,17 +19,17 @@ export class SensorsService {
 
   create(sensorControlDto: SensorControlDto): string {
     const { topic, state } = sensorControlDto;
+    const { nivelAgua, modoBomba } = this.mqttSubscriberService.sensorData;
 
-    // Verificación antes de encender la bomba de agua
-    if (
-      topic === this.topic_control_water_pump &&
-      (state === 'on' || state === 'off')
-    ) {
-      const { nivelAgua, modoBomba } = this.mqttSubscriberService.sensorData;
-
-      if (nivelAgua !== 'Con agua' || modoBomba !== 'manual') {
+    // Verificación de condiciones solo para la bomba de agua
+    if (topic === this.topic_control_water_pump) {
+      if (modoBomba !== 'manual') {
         throw new BadRequestException(
-          'La bomba esta en modo automatico, por favor cambialo al modo manual.',
+          'La bomba está en modo automático, por favor cámbiala al modo manual.',
+        );
+      } else if (nivelAgua !== 'Con agua') {
+        throw new BadRequestException(
+          'No se puede encender la bomba si no hay agua.',
         );
       }
     }
@@ -41,21 +41,18 @@ export class SensorsService {
       ? 'Encendiendo sensor'
       : state === 'off'
         ? 'Apagando sensor'
-        : 'ya mamo';
+        : 'Acción desconocida';
   }
 
-  modeWaterPump(waterPumpDto: WaterPumpDto): string {
+  async modeWaterPump(waterPumpDto: WaterPumpDto): Promise<string> {
     const { mode } = waterPumpDto;
+    const { nivelAgua } = this.mqttSubscriberService.modeNivelAgua;
 
-    // Verificación antes de cambiar el modo de la bomba de agua
-    if (mode === 'manual') {
-      const { nivelAgua } = this.mqttSubscriberService.sensorData;
-
-      if (nivelAgua !== 'Con agua') {
-        throw new BadRequestException(
-          'No se puede cambiar el modo de la bomba si no hay agua.',
-        );
-      }
+    // Verificación antes de cambiar a modo manual
+    if (mode === 'manual' && nivelAgua !== 'Con agua') {
+      throw new BadRequestException(
+        'No se puede cambiar al modo manual si no hay agua2.',
+      );
     }
 
     // Publicar comando MQTT para cambiar el modo de la bomba de agua
@@ -64,10 +61,13 @@ export class SensorsService {
       mode,
     );
 
+    // Actualizar el estado de modoBomba en sensorData para reflejar el cambio inmediato
+    this.mqttSubscriberService.sensorData.modoBomba = mode;
+
     return mode === 'auto'
       ? 'Modo automático activado'
       : mode === 'manual'
         ? 'Modo manual activado'
-        : 'ya mamo';
+        : 'Acción desconocida';
   }
 }

@@ -80,15 +80,25 @@ export class MqttSubscriberService implements OnModuleInit {
         break;
       case this.topic_water_level:
         this.sensorData.nivelAgua = data.nivelAgua;
+        this.modeNivelAgua.nivelAgua = data.nivelAgua;
         break;
       case this.topic_water_mode:
         this.sensorData.modoBomba = data.modoBomba;
+        this.modeNivelAgua.modoBomba = data.modoBomba;
         break;
       case this.topic_agua_bomba:
         this.sensorData.Bomba = data.Bomba;
         break;
     }
   }
+
+  public modeNivelAgua: {
+    nivelAgua: string;
+    modoBomba: string;
+  } = {
+    nivelAgua: '',
+    modoBomba: '',
+  };
 
   // Enviar los datos al frontend solo si todos están presentes
   private sendDataToFrontend() {
