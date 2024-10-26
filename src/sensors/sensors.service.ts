@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { SensorControlDto } from './dto/sensor-control.dto';
 import { MqttPublisherService } from 'src/mqtt/mqtt-publisher.service';
 import { MqttSubscriberService } from 'src/mqtt/mqtt-subscriber.service';
+import { WaterPumpDto } from './dto/water-pump.dto';
 
 @Injectable()
 export class SensorsService {
@@ -40,6 +41,33 @@ export class SensorsService {
       ? 'Encendiendo sensor'
       : state === 'off'
         ? 'Apagando sensor'
+        : 'ya mamo';
+  }
+
+  modeWaterPump(waterPumpDto: WaterPumpDto): string {
+    const { mode } = waterPumpDto;
+
+    // Verificación antes de cambiar el modo de la bomba de agua
+    if (mode === 'manual') {
+      const { nivelAgua } = this.mqttSubscriberService.sensorData;
+
+      if (nivelAgua !== 'Con agua') {
+        throw new BadRequestException(
+          'No se puede cambiar el modo de la bomba si no hay agua.',
+        );
+      }
+    }
+
+    // Publicar comando MQTT para cambiar el modo de la bomba de agua
+    this.mqttPublisherService.publishSensorControl(
+      this.topic_control_water_mode,
+      mode,
+    );
+
+    return mode === 'automatico'
+      ? 'Modo automático activado'
+      : mode === 'manual'
+        ? 'Modo manual activado'
         : 'ya mamo';
   }
 }
