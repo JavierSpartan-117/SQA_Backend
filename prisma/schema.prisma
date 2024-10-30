@@ -12,3 +12,32 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model SoilMoistureReading {
+  id           Int      @id @default(autoincrement())
+  sensorId     String    
+  moisture     Float     
+  timestamp    DateTime  @default(now())
+}
+
+model TemperatureHumidityReading {
+  id           Int      @id @default(autoincrement())
+  sensorId     String    
+  temperature  Float     // Temperatura en grados
+  humidity     Float     // Humedad en porcentaje
+  timestamp    DateTime  @default(now())
+}
+
+model WaterPumpStatus {
+  id           Int      @id @default(autoincrement())
+  sensorId     String    
+  isOn         Boolean   // Estado de la bomba (encendida/apagada)
+  timestamp    DateTime  @default(now())
+}
+
+model WaterLevelStatus {
+  id           Int      @id @default(autoincrement())
+  sensorId     String    
+  hasWater     Boolean   // Indica si hay agua (true) o no (false)
+  timestamp    DateTime  @default(now())
+}

@@ -40,7 +40,6 @@ export class SensorsWsGateway
     // this.logger.log(`Enviando datos al frontend: ${JSON.stringify(data)}`);
   }
 
-  // Metodo para recibir mensakes del frontend (Opcional)
   @SubscribeMessage('ledControl')
   handleLedControl(@MessageBody() { state }: { state: string }) {
     this.logger.log(`Recibiendo mensaje del frontend: ${state}`);

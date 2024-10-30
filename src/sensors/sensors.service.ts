@@ -34,7 +34,6 @@ export class SensorsService {
       }
     }
 
-    // Publicar comando MQTT para encender/apagar el sensor o actuador
     this.mqttPublisherService.publishSensorControl(topic, state);
 
     return state === 'on'
@@ -46,23 +45,11 @@ export class SensorsService {
 
   async modeWaterPump(waterPumpDto: WaterPumpDto): Promise<string> {
     const { mode } = waterPumpDto;
-    const { nivelAgua } = this.mqttSubscriberService.modeNivelAgua;
 
-    // Verificación antes de cambiar a modo manual
-    if (mode === 'manual' && nivelAgua !== 'Con agua') {
-      throw new BadRequestException(
-        'No se puede cambiar al modo manual si no hay agua2.',
-      );
-    }
-
-    // Publicar comando MQTT para cambiar el modo de la bomba de agua
     this.mqttPublisherService.publishModeBomb(
       this.topic_control_water_mode,
       mode,
     );
-
-    // Actualizar el estado de modoBomba en sensorData para reflejar el cambio inmediato
-    this.mqttSubscriberService.sensorData.modoBomba = mode;
 
     return mode === 'auto'
       ? 'Modo automático activado'

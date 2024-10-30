@@ -14,11 +14,13 @@ export class MqttConnectionService {
   };
 
   connect(): mqtt.MqttClient {
-    this.client = mqtt.connect(this.mqttUrl, this.mqttOptions);
+    if (!this.client) {
+      this.client = mqtt.connect(this.mqttUrl, this.mqttOptions);
 
-    this.client.on('connect', () => {
-      this.logger.log('Conectado al broker MQTT');
-    });
+      this.client.on('connect', () => {
+        this.logger.log('Conectado al broker MQTT');
+      });
+    }
 
     this.client.on('error', (error) => {
       this.logger.error('Error de conexión MQTT: ', error);

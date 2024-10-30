@@ -20,7 +20,6 @@ export class MqttSubscriberService implements OnModuleInit {
     private readonly sensorsWsService: SensorsWsService,
   ) {}
 
-  // Objeto para acumular los datos de los sensores
   public sensorData = {
     humedadSuelo: null,
     humedad: null,
@@ -30,7 +29,7 @@ export class MqttSubscriberService implements OnModuleInit {
     Bomba: null,
   };
 
-  private readonly sendInterval = 1000; // Intervalo en ms para enviar datos al frontend
+  private readonly sendInterval = 1000;
   private intervalHandle: NodeJS.Timeout;
 
   onModuleInit() {
@@ -41,7 +40,6 @@ export class MqttSubscriberService implements OnModuleInit {
     this.subscribeToTopic(this.topic_water_mode);
     this.subscribeToTopic(this.topic_agua_bomba);
 
-    // Configurar el envío de datos al frontend cada cierto tiempo
     this.intervalHandle = setInterval(() => {
       this.sendDataToFrontend();
     }, this.sendInterval);
@@ -61,7 +59,6 @@ export class MqttSubscriberService implements OnModuleInit {
       try {
         const data = JSON.parse(messageString);
 
-        // Almacenar los datos en el objeto acumulador
         this.updateSensorData(topic, data);
       } catch (error) {
         this.logger.error('Error al procesar el mensaje JSON: ', error.message);
@@ -132,8 +129,4 @@ export class MqttSubscriberService implements OnModuleInit {
       Bomba: null,
     };
   }
-
-  // Aquí puedes integrar con tus servicios para guardar en la base de datos
-  // Por ejemplo:
-  // this.sensorService.saveSensorData(data);
 }
