@@ -19,7 +19,7 @@ export class SensorsService {
 
   create(sensorControlDto: SensorControlDto): string {
     const { topic, state } = sensorControlDto;
-    const { nivelAgua, modoBomba } = this.mqttSubscriberService.sensorData;
+    const { nivelAgua, modoBomba } = this.mqttSubscriberService.modeNivelAgua;
 
     // Verificación de condiciones solo para la bomba de agua
     if (topic === this.topic_control_water_pump) {
